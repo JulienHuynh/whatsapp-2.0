@@ -1,18 +1,18 @@
 .dark-theme .app {
-    background: #090F13;
+  background: #090f13;
 }
 
 .dark-theme .app::before {
-    display: none;
+  display: none;
 }
 
 .dark-theme .app__mobile-message {
-    color: rgba(241, 241, 242, 0.92);
+  color: rgba(241, 241, 242, 0.92);
 }
 
 @media screen and (max-width: 500px) {
-    .dark-theme .app::before {
-        display: block;
-        background: rgb(5, 97, 98);
-    }
+  .dark-theme .app::before {
+    display: block;
+    background: rgb(29, 155, 240);
+  }
 }
