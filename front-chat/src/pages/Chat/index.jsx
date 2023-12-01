@@ -7,6 +7,7 @@ import Icon from "components/Icon";
 import Profile from "./components/Profile";
 import Convo from "./components/Convo";
 import { useUsersContext } from "context/usersContext";
+import pp from "../../assets/images/default-pp.png";
 
 const Chat = ({ match, history }) => {
 	const { users, setUserAsUnread, addNewMessage } = useUsersContext();
@@ -18,6 +19,7 @@ const Chat = ({ match, history }) => {
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
+	const [loggedInUser, setLoggedInUser] = useState({id: 2, profile_picture: pp, firstName: "Le rappeur", lastName: "damso", email: "lemaildedamso@gmail.com"});
 
 	useEffect(() => {
 		if (!user) history.push("/");
@@ -78,11 +80,11 @@ const Chat = ({ match, history }) => {
 				</footer>
 			</div>
 			<ChatSidebar
-				heading="Contact Info"
+				heading="Mon profil"
 				active={showProfileSidebar}
 				closeSidebar={() => setShowProfileSidebar(false)}
 			>
-				<Profile user={user} />
+				<Profile user={loggedInUser} closeSidebar={() => setShowProfileSidebar(false)}/>
 			</ChatSidebar>
 		</div>
 	);

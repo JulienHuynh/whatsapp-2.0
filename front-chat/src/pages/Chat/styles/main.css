@@ -669,6 +669,40 @@
     flex: 1;
 }
 
+.menu-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 165px;
+}
+
+.menu-actions button {
+    color: white;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.menu-actions button:hover {
+    color: rgb(29, 155, 240);
+}
+
+.save-btn {
+    color: rgb(29, 155, 240);
+    height: 50px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.save-btn:hover {
+    background: rgb(29, 155, 240);
+    color: white;
+}
+
+.profile__about-item {
+    width: 100%;
+    cursor: text;
+}
+
 /* End  Chat Sidebar */
 
 @media screen and (min-width: 1301px) {

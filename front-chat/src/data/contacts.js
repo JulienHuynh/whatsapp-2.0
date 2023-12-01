@@ -6,6 +6,7 @@ const users = [
 		id: 1,
 		profile_picture: pp,
 		name: "Julien Huynh",
+		email: "julienhynh@gmail.com",
 		messages: [
 			{
 				content: getRandomSentence(),

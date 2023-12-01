@@ -12,6 +12,7 @@ const Sidebar = () => {
 				<div className="sidebar__avatar-wrapper">
 					<img src={avatar} alt="Karen Okonkwo" className="avatar" />
 				</div>
+				Le rappeur damso
 			</header>
 			
 			<div className="sidebar__contacts">

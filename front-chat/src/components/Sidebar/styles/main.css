@@ -219,9 +219,9 @@
 
 @media screen and (min-width: 1301px) {
     .sidebar {
-        flex: 30%;
+        flex: 25%;
     }
     .sidebar~div {
-        flex: 70%;
+        flex: 85%;
     }
 }

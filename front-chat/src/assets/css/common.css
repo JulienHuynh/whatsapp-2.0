@@ -29,12 +29,13 @@
 }
 
 .header {
+    color: white;
     background: rgb(237, 237, 237);
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 60px;
-    padding: 10px;
+    padding: 20px;
     /* Fix for height bug with chat sidebar */
     min-height: 60px;
 }
