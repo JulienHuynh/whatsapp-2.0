@@ -41,7 +41,6 @@ const UsersProvider = ({ children }) => {
 				content: response,
 				sender: userId,
 				time: new Date().toLocaleTimeString(),
-				status: null,
 			};
 
 			usersCopy[userIndex].messages.TODAY.push(newMsgObject);
@@ -67,11 +66,10 @@ const UsersProvider = ({ children }) => {
 			content: message,
 			sender: null,
 			time: new Date().toLocaleTimeString(),
-			status: "delivered",
 		};
 
-		usersCopy[userIndex].messages.TODAY.push(newMsgObject);
-		setUsers(usersCopy);
+		// usersCopy[userIndex].messages.TODAY.push(newMsgObject);
+		// setUsers(usersCopy);
 
 		socket.emit("fetch_response", { userId });
 	};

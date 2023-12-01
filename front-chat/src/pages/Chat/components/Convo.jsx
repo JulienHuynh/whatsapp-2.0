@@ -7,17 +7,15 @@ const Convo = ({ lastMsgRef, messages: allMessages }) => {
 	const dates = Object.keys(allMessages);
 
 	return dates.map((date, dateIndex) => {
-		const messages = allMessages[date];
+		const messages = allMessages;
+
 		return (
 			<div key={dateIndex}>
-				<div className="chat__date-wrapper">
-					<span className="chat__date"> {date}</span>
-				</div>
 				{dateIndex === 0 && (
 					<p className="chat__encryption-msg">
 						<Icon id="lock" className="chat__encryption-icon" />
-						Messages are end-to-end encrypted. No one outside of this chat, not
-						even WhatsApp, can read or listen to them. Click to learn more.
+						Les messages sont chiffrés de bout en bout. Personne en dehors de ce chat, non
+						même WhatsApp, peut les lire ou les écouter. Appuyez pour plus d'infos.
 					</p>
 				)}
 				<div className="chat__msg-group">
@@ -82,19 +80,6 @@ const Convo = ({ lastMsgRef, messages: allMessages }) => {
 										<span className="chat__msg-filler"> </span>
 										<span className="chat__msg-footer">
 											<span> {formatTime(message.time)} </span>
-											<Icon
-												id={
-													message?.status === "sent"
-														? "singleTick"
-														: "doubleTick"
-												}
-												aria-label={message?.status}
-												className={`chat__msg-status-icon ${
-													message?.status === "read"
-														? "chat__msg-status-icon--blue"
-														: ""
-												}`}
-											/>
 										</span>
 										<button
 											aria-label="Message options"

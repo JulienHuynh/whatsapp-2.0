@@ -12,13 +12,13 @@ const Profile = ({ user }) => {
 
 			<div className="profile__section profile__section--about">
 				<div className="sb profile__heading-wrapper">
-					<h2 className="profile__heading"> About and phone number </h2>
+					<h2 className="profile__heading"> À propos et adresse email </h2>
 				</div>
 				<ul>
 					<li className="profile__about-item">
-						Out here saving the world, one block of code at a time.
+						Bonjour, je suis Julien Huynh, développeur web fullstack.
 					</li>
-					<li className="profile__about-item">+23423456789</li>
+					<li className="profile__about-item">julienhynh@gmail.com</li>
 				</ul>
 			</div>
 

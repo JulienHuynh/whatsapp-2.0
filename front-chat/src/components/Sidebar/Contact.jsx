@@ -1,17 +1,17 @@
 import React from "react";
 import Icon from "components/Icon";
-import { Link } from "react-router-dom";
-import formatTime from "utils/formatTime";
-import { useUsersContext } from "context/usersContext";
+import {Link} from "react-router-dom";
+import {useUsersContext} from "context/usersContext";
+import getRandomSentence from "../../utils/getRandomSentence";
 
 const Contact = ({ contact }) => {
 	const { setUserAsUnread } = useUsersContext();
 	const getLastMessage = () => {
-		const messageDates = Object.keys(contact.messages);
-		const recentMessageDate = messageDates[messageDates.length - 1];
-		const messages = [...contact.messages[recentMessageDate]];
-		const lastMessage = messages.pop();
-		return lastMessage;
+		return {
+			content: getRandomSentence(),
+			sender: 2,
+			time: "08:11:26",
+		};
 	};
 
 	const lastMessage = getLastMessage(contact);
@@ -33,7 +33,7 @@ const Contact = ({ contact }) => {
 				<div className="sidebar-contact__top-content">
 					<h2 className="sidebar-contact__name"> {contact.name} </h2>
 					<span className="sidebar-contact__time">
-						{formatTime(lastMessage.time)}
+						{lastMessage.time}
 					</span>
 				</div>
 				<div className="sidebar-contact__bottom-content">

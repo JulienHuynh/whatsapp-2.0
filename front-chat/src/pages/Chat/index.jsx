@@ -4,7 +4,6 @@ import ChatInput from "./components/ChatInput";
 import Header from "./components/Header";
 import ChatSidebar from "./components/ChatSidebar";
 import Icon from "components/Icon";
-import Search from "./components/Search";
 import Profile from "./components/Profile";
 import Convo from "./components/Convo";
 import { useUsersContext } from "context/usersContext";
@@ -18,7 +17,6 @@ const Chat = ({ match, history }) => {
 	const lastMsgRef = useRef(null);
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
-	const [showSearchSidebar, setShowSearchSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
 
 	useEffect(() => {
@@ -34,11 +32,7 @@ const Chat = ({ match, history }) => {
 	}, [users]);
 
 	const openSidebar = (cb) => {
-		// close any open sidebar first
 		setShowProfileSidebar(false);
-		setShowSearchSidebar(false);
-
-		// call callback fn
 		cb(true);
 	};
 
@@ -60,7 +54,6 @@ const Chat = ({ match, history }) => {
 				<Header
 					user={user}
 					openProfileSidebar={() => openSidebar(setShowProfileSidebar)}
-					openSearchSidebar={() => openSidebar(setShowSearchSidebar)}
 				/>
 				<div className="chat__content">
 					<Convo lastMsgRef={lastMsgRef} messages={user.messages} />
@@ -84,14 +77,6 @@ const Chat = ({ match, history }) => {
 					/>
 				</footer>
 			</div>
-			<ChatSidebar
-				heading="Search Messages"
-				active={showSearchSidebar}
-				closeSidebar={() => setShowSearchSidebar(false)}
-			>
-				<Search />
-			</ChatSidebar>
-
 			<ChatSidebar
 				heading="Contact Info"
 				active={showProfileSidebar}
