@@ -7,14 +7,20 @@ import reportWebVitals from "./reportWebVitals";
 import "./assets/css/index.css";
 import { UsersProvider } from "context/usersContext";
 import { SocketProvider } from "context/socketContext";
+import JwtAuthTokenContext from "context/jwtAuthTokenContext";
+import ErrorMessageContext from "context/errorMessageContext";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<SocketProvider>
-			<UsersProvider>
-				<App />
-			</UsersProvider>
-		</SocketProvider>
+		<JwtAuthTokenContext>
+			<ErrorMessageContext>
+				<SocketProvider>
+					<UsersProvider>
+						<App />
+					</UsersProvider>
+				</SocketProvider>
+			</ErrorMessageContext>
+		</JwtAuthTokenContext>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

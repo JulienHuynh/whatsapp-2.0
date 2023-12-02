@@ -47,7 +47,7 @@ router.post('/login', (req, res) => {
                         email: user.email
                     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_DURING})
 
-                    return res.json({access_token: token})
+                    return res.json({token: token, status: 200})
                 })
                 .catch(err => res.status(500).json({message: 'Login process failed', error: err}))
         })
