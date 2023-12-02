@@ -2,8 +2,8 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const checkTokenMiddleware = require('../jsonwebtoken/check')
-
-const Message = require('../models/message')
+const DB = require("../db.config");
+const Message = DB.Message;
 
 /** Récupération du routeur express */
 let router = express.Router()

@@ -1,8 +1,8 @@
 /** Import des module nécessaires */
 const express = require('express')
 const bcrypt = require('bcrypt')
-
-const Chat = require('../models/chat')
+const DB = require("../db.config");
+const Chat = DB.Chat;
 
 const Message = require('../models/message')
 

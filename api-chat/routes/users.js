@@ -1,8 +1,8 @@
 /** Import des module nécessaires */
 const express = require('express')
 const bcrypt = require('bcrypt')
-
-const User = require('../models/user')
+const DB = require("../db.config");
+const User = DB.User
 
 const checkTokenMiddleware = require('../jsonwebtoken/check')
 
