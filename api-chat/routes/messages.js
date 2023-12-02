@@ -1,6 +1,6 @@
 /** Import des module nécessaires */
 const express = require('express')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const checkTokenMiddleware = require('../jsonwebtoken/check')
 const DB = require("../db.config");
 const Message = DB.Message;
