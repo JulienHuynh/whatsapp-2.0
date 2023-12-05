@@ -5,7 +5,7 @@ import { jwtAuthTokenContext } from "../../context/jwtAuthTokenContext";
 import { Link, useNavigate } from "react-router-dom";
 import "./styles/main.css";
 
-export default function Login() {
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useContext(errorMessageContext);
@@ -33,7 +33,7 @@ export default function Login() {
           <form className="col-log">
             <div className={"login-form card"}>
               <div className="card-body">
-                <h1 className="title">Se connecter</h1>
+                <h1 className="title">Inscription</h1>
                 <input
                   type="email"
                   placeholder="Adresse mail"
@@ -57,14 +57,15 @@ export default function Login() {
                   className={"submit-btn"}
                   onClick={() => LoginFunction()}
                 >
-                  Se connecter
+                  S'inscrire
                 </button>
                 <p className="go-sub">
-                  <p>Pas encore de compte ?</p>
+                  <p>Vous avez déjà un compte ?</p>
                   <Link to={"/inscription"}  >
-                    Inscrivez-vous !
+                    Connectez-vous !
                   </Link>
                 </p>
+                 
               </div>
             </div>
           </form>
