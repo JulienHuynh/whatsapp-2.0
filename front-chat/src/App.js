@@ -7,6 +7,8 @@ import Sidebar from "components/Sidebar";
 import Chat from "pages/Chat";
 import NeedAuth from "./NeedAuth";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+
 
 const userPrefersDark =
 	window.matchMedia &&
@@ -51,6 +53,7 @@ function App() {
 					} />
 
 					<Route path="/se-connecter" element={<Login />} />
+					<Route path="/inscription" element={<SignUp />} />
 				</Routes>
 
 			</Router>
