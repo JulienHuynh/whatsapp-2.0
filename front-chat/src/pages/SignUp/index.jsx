@@ -61,7 +61,7 @@ export default function SignUp() {
                 </button>
                 <p className="go-sub">
                   <p>Vous avez déjà un compte ?</p>
-                  <Link to={"/inscription"}  >
+                  <Link to={"/se-connecter"}  >
                     Connectez-vous !
                   </Link>
                 </p>
