@@ -28,8 +28,8 @@ db.Chat.hasMany(db.Message)
 db.Message.belongsTo(db.Chat)
 
 /** Synchronisation à la DB */
-//sequelize.sync()
-sequelize.sync({ force: true })
+sequelize.sync()
+//sequelize.sync({ force: true })
 //sequelize.sync({ alter: true })
 
 module.exports = db
