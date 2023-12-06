@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wa_nodejs_docker
+    ports:
+      - "8245:8245"
+    volumes:
+      - ./api-chat:/usr/src/app
+    restart: always
+    networks:
+      - dev
+
+  db:
+    image: mariadb:10.7.1
+    container_name: wa_mariadb_docker
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: '1234'
+    ports:
+      - "3306:3306"
+    networks:
+      - dev
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: wa_phpmyadmin_docker
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+    networks:
+      - dev
+
+volumes:
+  db-data:
+
+networks:
+  dev:

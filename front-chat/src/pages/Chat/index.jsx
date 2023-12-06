@@ -8,11 +8,13 @@ import Profile from "./components/Profile";
 import Convo from "./components/Convo";
 import { useUsersContext } from "context/usersContext";
 import pp from "../../assets/images/default-pp.png";
+import Sidebar from "../../components/Sidebar";
+import {useParams} from "react-router-dom";
 
-const Chat = ({ match, history }) => {
+const Chat = ({ history }) => {
 	const { users, setUserAsUnread, addNewMessage } = useUsersContext();
 
-	const userId = match.params.id;
+	const userId = useParams().id;
 	let user = users.filter((user) => user.id === Number(userId))[0];
 
 	const lastMsgRef = useRef(null);
@@ -68,9 +70,7 @@ const Chat = ({ match, history }) => {
 					>
 						<Icon id="downArrow" />
 					</button>
-					
 					<ChatInput
-						
 						showAttach={showAttach}
 						setShowAttach={setShowAttach}
 						newMessage={newMessage}
@@ -86,7 +86,7 @@ const Chat = ({ match, history }) => {
 			>
 				<Profile user={loggedInUser} closeSidebar={() => setShowProfileSidebar(false)}/>
 			</ChatSidebar>
-		</div>
+			</div>
 	);
 };
 

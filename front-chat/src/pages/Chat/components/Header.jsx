@@ -1,6 +1,20 @@
-import React from "react";
+import React, {useContext} from "react";
+import {jwtAuthTokenContext} from "../../../context/jwtAuthTokenContext";
+import Cookies from "js-cookie";
+import {useLocation} from "react-router-dom";
 
 const Header = ({ user, openProfileSidebar }) => {
+	const [authToken, setAuthToken] = useContext(jwtAuthTokenContext);
+	const location = useLocation();
+
+	const disconnectUser = () => {
+		Cookies.remove('authToken');
+		setAuthToken('');
+		if (location.pathname === '/') {
+			window.location.reload();
+		}
+	}
+
 	return (
 		<header className="header chat__header">
 			<div className="chat__avatar-wrapper">
@@ -18,7 +32,7 @@ const Header = ({ user, openProfileSidebar }) => {
 				<button onClick={openProfileSidebar}>
 					Profil
 				</button>
-				<button>
+				<button onClick={disconnectUser}>
 					Se déconnecter
 				</button>
 			</div>

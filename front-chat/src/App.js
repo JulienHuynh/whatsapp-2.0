@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Loader from "./components/Loader";
 import Home from "./pages/Home";
 import Sidebar from "components/Sidebar";
 import Chat from "pages/Chat";
+import NeedAuth from "./NeedAuth";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+
 
 const userPrefersDark =
 	window.matchMedia &&
@@ -30,13 +34,28 @@ function App() {
 		<div className="app">
 			<p className="app__mobile-message"> LOADER APP. </p>
 			<Router>
-				<div className="app-content">
-					<Sidebar />
-					<Switch>
-						<Route path="/chat/:id" component={Chat} />
-						<Route component={Home} />
-					</Switch>
-				</div>
+				<Routes>
+					<Route path="/" element={
+						<NeedAuth>
+							<div className="app-content">
+								<Sidebar />
+								<Home />
+							</div>
+						</NeedAuth>
+					} />
+					<Route path="/chat/:id" element={
+						<NeedAuth>
+							<div className="app-content">
+								<Sidebar />
+								<Chat />
+							</div>
+						</NeedAuth>
+					} />
+
+					<Route path="/se-connecter" element={<Login />} />
+					<Route path="/inscription" element={<SignUp />} />
+				</Routes>
+
 			</Router>
 		</div>
 	);
