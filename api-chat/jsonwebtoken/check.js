@@ -7,7 +7,7 @@ const extractBearer = authorization => {
         return false
     }
 
-    // Isolation du token
+    /** Isolation du token */ 
     const matches = authorization.match(/(bearer)\s+(\S+)/i)
     
     return matches && matches[2]
@@ -19,14 +19,14 @@ const checkTokenMiddleware = (req, res, next) => {
     const token = req.headers.authorization && extractBearer(req.headers.authorization)
 
     if(!token){
-        return res.status(401).json({message: `Jeune enfoiré, retourne d'ou tu viens`})
+        return res.status(401).json({message: `Pas de token.`})
     }
 
     // Vérifier la validité du token
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
         console.log('Decoded token:', decodedToken)
         if(err){
-            return res.status(401).json({message: 'Mauvais Token'})
+            return res.status(401).json({message: 'Mauvais Token.'})
         }
         next()
     })
