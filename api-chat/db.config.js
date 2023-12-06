@@ -16,27 +16,20 @@ db.sequelize = sequelize;
 db.User = require("./models/user")(sequelize);
 db.Chat = require("./models/chat")(sequelize);
 db.Message = require("./models/message")(sequelize);
-db.User_chat = require("./models/user_chat")(sequelize);
 
-/** ManyToMany User Chat*/
-db.User.belongsToMany(db.Chat, {through: db.User_chat });
-db.Chat.belongsToMany(db.User, { through: db.User_chat });
-db.User_chat.belongsTo(db.Chat);
-db.User_chat.belongsTo(db.User);
-db.Chat.hasMany(db.User_chat);
-db.User.hasMany(db.User_chat);
+/** Relations Chat*/
+db.User.belongsToMany(db.Chat, { through: 'Userchat' });
+db.Chat.belongsToMany(db.User, { through: 'Userchat' });
 
-/** ManyToOne User Message */
-db.User.hasMany(db.Message, {foreignKey: "user_id"})
-db.Message.belongsTo(db.User, {foreignKey: "user_id"})
-
-/** ManyToOne User Message */
-db.Chat.hasMany(db.Message, {foreignKey: "chat_id"})
-db.Message.belongsTo(db.Chat, {foreignKey: "chat_id"})
+/** Relations Message */
+db.Message.belongsTo(db.User);
+db.User.hasMany(db.Message)
+db.Chat.hasMany(db.Message)
+db.Message.belongsTo(db.Chat)
 
 /** Synchronisation à la DB */
 //sequelize.sync()
-//sequelize.sync({ force: true })
-sequelize.sync({ alter: true })
+sequelize.sync({ force: true })
+//sequelize.sync({ alter: true })
 
 module.exports = db
