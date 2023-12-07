@@ -37,12 +37,12 @@ exports.updateMyProfile = async (req, res) => {
 
         /** Validation des données reçues */
         if(!email || !firstname || !lastname){
-            return res.status(400).json({ message: 'Paramètres manquants'})
+            return res.status(400).json({ message: 'Paramètres manquants.'})
         }
 
         let user = await User.findOne({ where:{ email: email },raw: true })
         if (user !== null) {
-            return res.status(409).json({ message: 'Adresse Email déja utilisée' })
+            return res.status(409).json({ message: 'Adresse Email déja utilisée.' })
         }
 
         let updatedUser = {
@@ -52,6 +52,7 @@ exports.updateMyProfile = async (req, res) => {
         }
 
         await User.update( updatedUser, { where: { id: req.decodedToken.id }})
+        return res.json({ message: 'Votre profil a bien été mis à jour.', data: user })
 
     } catch (err) {
         res.status(500).json({ message: "Erreur de Base de Données.", error: err });
