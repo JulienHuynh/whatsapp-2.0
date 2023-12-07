@@ -25,7 +25,7 @@ exports.getUser = async (req, res) => {
         }
 
         /** Utilisateur trouvé & réponse */ 
-        return res.json({ message: "le profil à été mis à jour." });
+        return res.json({data: user})
     } catch (err) {
         res.status(500).json({ message: "Erreur de Base de Données.", error: err });
     }
@@ -52,6 +52,7 @@ exports.updateMyProfile = async (req, res) => {
         }
 
         await User.update( updatedUser, { where: { id: req.decodedToken.id }})
+        return res.json({ message: "le profil à été mis à jour." });
 
     } catch (err) {
         res.status(500).json({ message: "Erreur de Base de Données.", error: err });

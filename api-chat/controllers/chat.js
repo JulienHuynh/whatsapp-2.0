@@ -34,20 +34,40 @@ exports.getChat = async (req, res) => {
 
 exports.createChat = async (req,res) => {
     try{
-        const { content, chatId } = req.body
+        const { userIds } = req.body
 
         /** Validation des données */    
-        if(!content || !chatId){
+        if(!userIds){
             return res.status(400).json({ message: 'Données manquantes.'})
         }
 
-        /** Récupération de l'ID de l'utilisateur connecté */
-        req.body.user_id = req.decodedToken.id
-
-        /** Creation du chat & réponse*/ 
-        await Chat.create(req.body)
         
-        return res.json({ message: 'Chat Crée.', data: user })
+        const users = await User.findAll({ where: { id: userIds }})
+
+        /** Vérification de l'existance des utilisateurs */
+        if(!users || users.length !== userIds.length) {
+            return res.status(404).json({ message: 'Utilisateurs introuvables.'})
+        }
+
+        /** Vérification de l'existance d'un chat entre les utilisateurs */
+        const existingChat = await Chat.findOne({
+            where:{
+                id: {
+                    [Op.in]: userIds
+                }
+            },
+            include: [{ model: User, as: 'users', where: { id: userIds }}]
+        })
+
+        if(existingChat){
+            return res.status(400).json({ message: 'Il existe déja un chat entre les utilisateurs.'})
+        }
+        /** Creation du chat & réponse*/ 
+        const chat = await Chat.create({})
+
+        await chat.addUsers(users)
+        
+        return res.json({ message: 'Chat Crée.', data: chat })
     }
     catch(err) {
         res.status(500).json({message: 'Erreur de Base de Données.', error: err})
