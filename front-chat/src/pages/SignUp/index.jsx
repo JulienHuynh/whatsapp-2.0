@@ -21,6 +21,7 @@ export default function SignUp() {
       } else {
         setErrorMessage("");
         setAuthToken(response.token);
+        console.log(response);
         navigate("/");
       }
     });
@@ -61,11 +62,8 @@ export default function SignUp() {
                 </button>
                 <p className="go-sub">
                   <p>Vous avez déjà un compte ?</p>
-                  <Link to={"/se-connecter"}  >
-                    Connectez-vous !
-                  </Link>
+                  <Link to={"/se-connecter"}>Connectez-vous !</Link>
                 </p>
-                 
               </div>
             </div>
           </form>
