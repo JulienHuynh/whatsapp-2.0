@@ -26,10 +26,12 @@ module.exports = (sequelize) => {
                 validate: {
                     isEmail: true, // Validation de données
                 },
+                allowNull: false,
             },
             password: {
                 type: DataTypes.STRING(100),
                 Is: /^[0-9a-f]{64}$/i, // Contrainte
+                allowNull: false,
             },
         },
         { paranoid: true }
