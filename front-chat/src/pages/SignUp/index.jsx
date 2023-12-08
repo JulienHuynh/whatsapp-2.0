@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import useSignIn from "../../hooks/useSignIn";
+import { useSignUp } from "../../hooks/useApi";
 import { errorMessageContext } from "../../context/errorMessageContext";
 import { jwtAuthTokenContext } from "../../context/jwtAuthTokenContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,20 +8,22 @@ import "./styles/main.css";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [firstname, setFirstname] = useState("");
   const [errorMessage, setErrorMessage] = useContext(errorMessageContext);
   // eslint-disable-next-line no-unused-vars
   const [authToken, setAuthToken] = useContext(jwtAuthTokenContext);
   const navigate = useNavigate();
 
-  const LoginFunction = () => {
-    console.log(email, password);
-    useSignIn({ email, password }).then((response) => {
+  const LoginFunction = (event) => {
+    event.preventDefault();
+    useSignUp({ email, password, lastname, firstname }).then((response) => {
+ 
       if (response.status !== 200) {
         setErrorMessage(response.message);
       } else {
         setErrorMessage("");
-        setAuthToken(response.token);
-        console.log(response);
+        setAuthToken(response.data.token);
         navigate("/");
       }
     });
@@ -35,6 +37,22 @@ export default function SignUp() {
             <div className={"login-form card"}>
               <div className="card-body">
                 <h1 className="title">Inscription</h1>
+                <input
+                  
+                  placeholder="Prénom"
+                  className={"input"}
+                  onChange={(e) => {
+                    setFirstname(e.target.value);
+                  }}
+                />
+                <input
+                   
+                  placeholder="Nom"
+                  className={"input"}
+                  onChange={(e) => {
+                    setLastname(e.target.value);
+                  }}
+                />
                 <input
                   type="email"
                   placeholder="Adresse mail"
@@ -56,7 +74,7 @@ export default function SignUp() {
                 )}
                 <button
                   className={"submit-btn"}
-                  onClick={() => LoginFunction()}
+                  onClick={(e) => LoginFunction(e)}
                 >
                   S'inscrire
                 </button>

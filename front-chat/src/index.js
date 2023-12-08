@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -10,19 +10,20 @@ import { SocketProvider } from "context/socketContext";
 import JwtAuthTokenContext from "context/jwtAuthTokenContext";
 import ErrorMessageContext from "context/errorMessageContext";
 
-ReactDOM.render(
-	<React.StrictMode>
-		<JwtAuthTokenContext>
-			<ErrorMessageContext>
-				<SocketProvider>
-					<UsersProvider>
-						<App />
-					</UsersProvider>
-				</SocketProvider>
-			</ErrorMessageContext>
-		</JwtAuthTokenContext>
-	</React.StrictMode>,
-	document.getElementById("root")
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+    <React.StrictMode>
+        <JwtAuthTokenContext>
+            <ErrorMessageContext>
+                <SocketProvider>
+                    <UsersProvider>
+                        <App />
+                    </UsersProvider>
+                </SocketProvider>
+            </ErrorMessageContext>
+        </JwtAuthTokenContext>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

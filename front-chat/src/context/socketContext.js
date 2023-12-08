@@ -2,8 +2,8 @@ import { createContext, useContext } from "react";
 import io from "socket.io-client";
 
 const SOCKET_URL = window.location.origin.includes("localhost")
-	? "http://localhost:5000"
-	: "https://whatsapp-web-clone-backend.herokuapp.com/";
+	? "http://localhost:3000"
+	: `${process.env.REACT_APP_API_URL}`;
 
 const socket = io.connect(SOCKET_URL);
 
