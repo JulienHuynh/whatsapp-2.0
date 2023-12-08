@@ -1,14 +1,8 @@
 /** Import des module nécessaires */
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require("sequelize");
 
 /** Définition du modèle */
 module.exports = (sequelize) => {
-    const Chat = sequelize.define('Chat', {
-        id: {
-            type: DataTypes.INTEGER(10),
-            primaryKey: true,
-            autoIncrement: true
-        }
-    },{ paranoid: true }) // Soft Delete
-    return Chat;
-}
+	const Chat = sequelize.define("Chat");
+	return Chat;
+};

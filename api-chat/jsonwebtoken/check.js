@@ -1,36 +1,34 @@
 /** Import des module nécessaires */
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 /** Extraction du token */
-const extractBearer = authorization => {
-    if(typeof authorization !== 'string'){
-        return false
-    }
+const extractBearer = (authorization) => {
+	if (typeof authorization !== "string") {
+		return false;
+	}
 
-    /** Isolation du token */ 
-    const matches = authorization.match(/(bearer)\s+(\S+)/i)
-    
-    return matches && matches[2]
-}
+	/** Isolation du token */
+	const matches = authorization.match(/(bearer)\s+(\S+)/i);
+
+	return matches && matches[2];
+};
 
 /** Vérification de la présence du token */
 const checkTokenMiddleware = (req, res, next) => {
+	const token = req.headers.authorization && extractBearer(req.headers.authorization);
 
-    const token = req.headers.authorization && extractBearer(req.headers.authorization)
+	if (!token) {
+		return res.status(401).json({ message: `Pas de token.` });
+	}
 
-    if(!token){
-        return res.status(401).json({message: `Pas de token.`})
-    }
+	/** Vérifier la validité du token */
+	jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+		if (err) {
+			return res.status(401).json({ message: "Mauvais Token." });
+		}
+		req.decodedToken = decodedToken;
+		next();
+	});
+};
 
-    // Vérifier la validité du token
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-        console.log('Decoded token:', decodedToken)
-        if(err){
-            return res.status(401).json({message: 'Mauvais Token.'})
-        }
-        req.decodedToken = decodedToken
-        next()
-    })
-}
-
-module.exports = checkTokenMiddleware
+module.exports = checkTokenMiddleware;
