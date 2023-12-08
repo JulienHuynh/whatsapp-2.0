@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
-import useSignIn from "../../hooks/useSignIn";
+import { useSignIn } from "../../hooks/useApi";
+import Cookies from "js-cookie";
 import { errorMessageContext } from "../../context/errorMessageContext";
 import { jwtAuthTokenContext } from "../../context/jwtAuthTokenContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,14 +14,18 @@ export default function Login() {
   const [authToken, setAuthToken] = useContext(jwtAuthTokenContext);
   const navigate = useNavigate();
 
-  const LoginFunction = () => {
-    console.log(email, password);
+  const LoginFunction = (event) => {
+    event.preventDefault();
+
     useSignIn({ email, password }).then((response) => {
       if (response.status !== 200) {
         setErrorMessage(response.message);
       } else {
+        if (response.data.token) {
+          Cookies.set("authToken", response.data.token, { expires: 1 / 24 });
+        }
         setErrorMessage("");
-        setAuthToken(response.token);
+        setAuthToken(response.data.token);
         navigate("/");
       }
     });
@@ -55,15 +60,13 @@ export default function Login() {
                 )}
                 <button
                   className={"submit-btn"}
-                  onClick={() => LoginFunction()}
+                  onClick={(e) => LoginFunction(e)}
                 >
                   Se connecter
                 </button>
                 <p className="go-sub">
                   <p>Pas encore de compte ?</p>
-                  <Link to={"/inscription"}  >
-                    Inscrivez-vous !
-                  </Link>
+                  <Link to={"/inscription"}>Inscrivez-vous !</Link>
                 </p>
               </div>
             </div>
