@@ -59,6 +59,7 @@ io.on('connection', (socket) => {
 	console.log('A user connected');
 
 	socket.on('newMessage', (message) => {
+		console.log('New message received', message);
 		io.emit('messageToDispatch', message);
 	});
 

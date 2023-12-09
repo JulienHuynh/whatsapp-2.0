@@ -60,10 +60,8 @@ const Chat = () => {
 		let message = {};
 		useCreateMessages({content: newMessage, chatId: newChatId}).then((response) => {
 			message = { ...response.data.data, UserId: loggedInUserId};
-			setMessages((prevMessages) => [...prevMessages, message]);
+			socket.emit('newMessage', message);
 		});
-
-		return message;
 	}
 
 	const openSidebar = (cb) => {
@@ -75,8 +73,7 @@ const Chat = () => {
 		 if (editMode) {
 			 UpdateMessage(editedMessageId, newMessage);
 		 } else {
-			 let message = CreateMessage(newMessage, newChatId);
-			 socket.emit('newMessage', message);
+			 CreateMessage(newMessage, newChatId);
 		 }
 	    setEditMode(false)
 		setEditedMessageId(null)
@@ -90,8 +87,8 @@ const Chat = () => {
 		});
 
 		return () => {
-			// Déconnectez le socket lorsque le composant est démonté
-			socket.disconnect();
+			// Nettoyez le gestionnaire d'événements lors du démontage du composant
+			socket.off('messageToDispatch');
 		};
 	}, [submitNewMessage]);
 
