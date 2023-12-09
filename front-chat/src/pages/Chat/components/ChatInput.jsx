@@ -22,10 +22,7 @@ const ChatInput = ({
 		}
 	};
 	return (
-		<div className="chat__input-wrapper">
-		
-	
-		
+		<div className="chat__input-wrapper">	
 			<div className="pos-rel">
 				<button aria-label="Attach" onClick={() => setShowAttach(!showAttach)}>
 					<Icon

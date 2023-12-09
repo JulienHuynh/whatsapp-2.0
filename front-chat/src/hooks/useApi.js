@@ -29,6 +29,9 @@ export function useGetChat(userIds) {
 export function useCreateChat(userIds) {
     return Axios.put('/chats', userIds)
 }
+export function useCreateMessages(content,chatId) {
+    return Axios.put('/messages', content,chatId)
+}
 
 
 let isLogged = () => {

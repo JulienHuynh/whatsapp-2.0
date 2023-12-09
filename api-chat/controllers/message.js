@@ -93,8 +93,11 @@ exports.updateMessage = async (req, res) => {
 
 exports.createMessage = async (req, res) => {
 	try {
+		
 		const { content, chatId } = req.body;
 		const userId = req.decodedToken.id;
+
+	
 
 		/** Validation des données */
 		if (!content || !chatId) {
