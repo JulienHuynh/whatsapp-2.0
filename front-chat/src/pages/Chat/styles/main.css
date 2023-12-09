@@ -734,6 +734,10 @@
     background: black;
 }
 
+.chat__msg {
+    min-width: 15%;
+}
+
 /* End  Chat Sidebar */
 
 @media screen and (min-width: 1301px) {
@@ -745,6 +749,7 @@
 @media screen and (min-width: 1000px) and (max-width: 1300px) {
     .chat__msg {
         max-width: 75%;
+        min-width: 25%;
     }
 }
 
@@ -775,5 +780,12 @@
         width: 40%;
         min-width: 300px;
         max-width: 400px;
+    }
+}
+
+
+@media screen and (max-width: 1000px) {
+    .chat__msg {
+        min-width: 45%;
     }
 }
