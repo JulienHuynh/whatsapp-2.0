@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 
 const Chat = () => {
 
-	const interlocutorId = useParams().id;
+	const interlocutorId = parseInt(useParams().id);
 
 	const lastMsgRef = useRef(null);
 	const [showAttach, setShowAttach] = useState(false);
@@ -26,7 +26,7 @@ const Chat = () => {
 	const GetChat = () => {
 		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
 		useGetChat(usersIds).then((response) => {
-			console.log(response)
+			console.log(response.data)
 		}).catch(error => {
 			if (error.response.data.status === 400) {
 				CreateChat();
@@ -60,20 +60,20 @@ const Chat = () => {
 				<div className="chat__bg"></div>
 
 				<Header
-					user={loggedInUserId}
+					interlocutorId={interlocutorId}
 					openProfileSidebar={() => openSidebar(setShowProfileSidebar)}
 				/>
 				<div className="chat__content">
 					{/*<Convo lastMsgRef={lastMsgRef} messages={user.messages} />*/}
 				</div>
 				<footer className="chat__footer">
-					<button
-						className="chat__scroll-btn"
-						aria-label="scroll down"
-						onClick={scrollToLastMsg}
-					>
-						<Icon id="downArrow" />
-					</button>
+					{/*<button*/}
+					{/*	className="chat__scroll-btn"*/}
+					{/*	aria-label="scroll down"*/}
+					{/*	onClick={scrollToLastMsg}*/}
+					{/*>*/}
+					{/*	<Icon id="downArrow" />*/}
+					{/*</button>*/}
 					<ChatInput
 						showAttach={showAttach}
 						setShowAttach={setShowAttach}
@@ -88,7 +88,7 @@ const Chat = () => {
 				active={showProfileSidebar}
 				closeSidebar={() => setShowProfileSidebar(false)}
 			>
-				<Profile user={loggedInUserId} closeSidebar={() => setShowProfileSidebar(false)}/>
+				<Profile loggedInUserId={loggedInUserId} closeSidebar={() => setShowProfileSidebar(false)}/>
 			</ChatSidebar>
 			</div>
 	);

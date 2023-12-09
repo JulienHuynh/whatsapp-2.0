@@ -3,9 +3,11 @@ import "./styles/main.css";
 import avatar from "assets/images/default-pp.png";
 import Contact from "./Contact";
 import {useGetUsers} from "../../hooks/useApi";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
 	const [contacts, setContacts] = useState([]);
+	const loggedInUserId = Cookies.get("user_id");
 
 	useEffect(() => {
 		GetUsersList();
@@ -13,7 +15,8 @@ const Sidebar = () => {
 
 	const GetUsersList = (event) => {
 		useGetUsers().then((response) => {
-			setContacts(response.data.data);
+			let contacts = response.data.data.filter((user) => user.id !== parseInt(loggedInUserId));
+			setContacts(contacts);
 		}).catch(error => {
 			console.error(error.response.data.message);
 		});
@@ -25,7 +28,7 @@ const Sidebar = () => {
 				<div className="sidebar__avatar-wrapper">
 					<img src={avatar} alt="Karen Okonkwo" className="avatar" />
 				</div>
-				ALO LA TERRE
+				Whatsapp 2.0
 			</header>
 			
 			<div className="sidebar__contacts">

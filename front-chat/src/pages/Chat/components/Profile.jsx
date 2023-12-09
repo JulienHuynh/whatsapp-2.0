@@ -1,10 +1,23 @@
-import React, { useState } from "react";
-import { useUpdateProfile } from "../../../hooks/useApi";
+import React, {useEffect, useState} from "react";
+import {useGetUser, useUpdateProfile} from "../../../hooks/useApi";
+import pp from "assets/images/default-pp.png";
 
-const Profile = ({ user, closeSidebar }) => {
-  const [firstname, setFirstName] = useState(user.firstname);
-  const [lastname, setLastName] = useState(user.lastname);
-  const [email, setEmail] = useState(user.email);
+const Profile = ({ loggedInUserId, closeSidebar }) => {
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    GetProfile();
+  }, []);
+
+  const GetProfile = () => {
+    useGetUser(loggedInUserId).then((response) => {
+        setFirstName(response.data.data.firstname);
+        setLastName(response.data.data.lastname);
+        setEmail(response.data.data.email);
+      });
+  }
 
   const saveProfile = (event) => {
     event.preventDefault();
@@ -25,14 +38,14 @@ const Profile = ({ user, closeSidebar }) => {
       <div className="profile__section profile__section--personal">
         <div className="profile__avatar-wrapper">
           <img
-            src={user.profile_picture}
-            alt={user.firstName}
+            src={pp}
+            alt={firstname}
             className="avatar"
           />
         </div>
         <h2 className="profile__name">
           {" "}
-          {user.firstName} {user.lastName}{" "}
+          {firstname} {lastname}{" "}
         </h2>
       </div>
 
@@ -46,18 +59,21 @@ const Profile = ({ user, closeSidebar }) => {
             onChange={(e) => setFirstName(e.target.value)}
             className="profile__about-item"
             value={firstname}
+            placeholder={"Prénom"}
           ></input>
           <input
             type={"text"}
             onChange={(e) => setLastName(e.target.value)}
             className="profile__about-item"
             value={lastname}
+            placeholder={"Nom"}
           ></input>
           <input
             type={"email"}
             onChange={(e) => setEmail(e.target.value)}
             className="profile__about-item"
             value={email}
+            placeholder={"Email"}
           ></input>
         </ul>
       </div>

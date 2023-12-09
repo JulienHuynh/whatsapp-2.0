@@ -10,12 +10,16 @@ const Axios = axios.create({
 export function useSignUp(userCredentials) {
     return Axios.post('/auth/register', userCredentials) 
 }
-export  function useSignIn(userCredentials) {
+export function useSignIn(userCredentials) {
     return Axios.post('/auth/login', userCredentials)      
 }
-export  function useGetUsers() {
+export function useGetUsers() {
     return Axios.get('/users')
 }
+export function useGetUser(userId) {
+    return Axios.get(`/users/${userId}`)
+}
+
 export function useUpdateProfile(userCredentials) {
     return Axios.patch('/users/me', userCredentials)      
 }
