@@ -63,6 +63,7 @@ exports.getChatByUsers = async (req, res) => {
 					],
 				},
 			},
+			include: {model: Message}
 		});
 
 		if (!existingChat) {

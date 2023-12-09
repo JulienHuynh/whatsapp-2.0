@@ -8,17 +8,18 @@ import Profile from "./components/Profile";
 import {useParams} from "react-router-dom";
 import {useCreateChat, useCreateMessages, useGetChat} from "../../hooks/useApi";
 import Cookies from "js-cookie";
+import Convo from "./components/Convo";
 
 const Chat = () => {
 
 	const interlocutorId = parseInt(useParams().id);
 
-	const lastMsgRef = useRef(null);
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
 	const [newChatId, setChatId] = useState(null);
-	const loggedInUserId = Cookies.get("user_id");
+	const [messages, setMessages] = useState([]);
+	const loggedInUserId = parseInt(Cookies.get("user_id"));
 
 	useEffect(() => {
 		GetChat();
@@ -27,8 +28,8 @@ const Chat = () => {
 	const GetChat = () => {
 		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
 		useGetChat(usersIds).then((response) => {
-			console.log(response.data)
 			setChatId(response.data.data.id)
+			setMessages(response.data.data.Messages);
 		}).catch(error => {
 			if (error.response.data.status === 400) {
 				CreateChat();
@@ -44,10 +45,6 @@ const Chat = () => {
 	const openSidebar = (cb) => {
 		setShowProfileSidebar(false);
 		cb(true);
-	};
-
-	const scrollToLastMsg = () => {
-		lastMsgRef.current.scrollIntoView();
 	};
 
 	const submitNewMessage = () => {
@@ -68,7 +65,7 @@ const Chat = () => {
 					openProfileSidebar={() => openSidebar(setShowProfileSidebar)}
 				/>
 				<div className="chat__content">
-					{/*<Convo lastMsgRef={lastMsgRef} messages={user.messages} />*/}
+					<Convo messages={messages} loggedInUserId={loggedInUserId}/>
 				</div>
 				<footer className="chat__footer">
 					{/*<button*/}

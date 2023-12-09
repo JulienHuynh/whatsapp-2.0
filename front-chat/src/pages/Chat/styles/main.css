@@ -210,13 +210,24 @@
     background: transparent;
 }
 
-.chat__msg-footer {
+.chat__msg-footer-right {
     position: absolute;
     display: flex;
     align-items: center;
-    right: 7px;
-    bottom: 3px;
-    color: rgba(0, 0, 0, 0.45);
+    right: 0;
+    bottom: -22px;
+    color: #afafaf;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.chat__msg-footer-left {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    left: 0;
+    bottom: -22px;
+    color: #afafaf;
     font-size: 0.7rem;
     font-weight: 500;
 }
