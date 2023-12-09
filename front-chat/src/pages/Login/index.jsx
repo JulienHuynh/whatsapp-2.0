@@ -17,18 +17,26 @@ export default function Login() {
   const LoginFunction = (event) => {
     event.preventDefault();
 
-    useSignIn({ email, password }).then((response) => {
-        if (response.data.access_token) {
-          Cookies.set("authToken", response.data.access_token, { expires: 1 / 24 });
-          setErrorMessage("");
-          setAuthToken(response.data.access_token);
-          navigate("/");
-        }
-    }).catch(error => {
-      setErrorMessage(error.response.data.message);
-    });;
+    useSignIn({ email, password })
+        .then((response) => {
+          if (response.status === 200) {
+            Cookies.set("user_id", response.data.user_id.id, {
+              expires: 1 / 24,
+            });
+            if (response.data.access_token) {
+              Cookies.set("authToken", response.data.access_token, {
+                expires: 1 / 24,
+              });
+              setErrorMessage("");
+              setAuthToken(response.data.access_token);
+              navigate("/");
+            }
+          }
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.message);
+        });
   };
-
   return (
     <React.Fragment>
       <div className="login-page">

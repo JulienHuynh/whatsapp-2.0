@@ -10,6 +10,7 @@ const Header = ({ user, openProfileSidebar }) => {
 
 	const disconnectUser = () => {
 		Cookies.remove('authToken');
+		Cookies.remove('user_id');
 		setAuthToken('');
 		if (location.pathname === '/') {
 			window.location.reload();

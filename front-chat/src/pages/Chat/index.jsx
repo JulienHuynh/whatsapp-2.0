@@ -5,33 +5,40 @@ import Header from "./components/Header";
 import ChatSidebar from "./components/ChatSidebar";
 import Icon from "components/Icon";
 import Profile from "./components/Profile";
-import Convo from "./components/Convo";
-import { useUsersContext } from "context/usersContext";
-import pp from "../../assets/images/default-pp.png";
-import Sidebar from "../../components/Sidebar";
 import {useParams} from "react-router-dom";
-import {useGetChat} from "../../hooks/useApi";
+import {useCreateChat, useGetChat} from "../../hooks/useApi";
+import Cookies from "js-cookie";
 
 const Chat = () => {
 
-	const userId = useParams().id;
+	const interlocutorId = useParams().id;
 
 	const lastMsgRef = useRef(null);
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
-	const [loggedInUser, setLoggedInUser] = useState({id: 2, firstname: "Le rappeur", lastname: "damso", email: "lemaildedamso@gmail.com"});
+	const loggedInUserId = Cookies.get("user_id");
 
 	useEffect(() => {
 		GetChat();
 	}, []);
 
 	const GetChat = () => {
-		let usersIds = [loggedInUser.id, userId];
-		useGetChat({ usersIds }).then((response) => {
+		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
+		useGetChat(usersIds).then((response) => {
 			console.log(response)
 		}).catch(error => {
-			console.error(error.response.data.message);
+			if (error.response.data.status === 400) {
+				CreateChat();
+			}
+		});
+	}
+
+	const CreateChat = () => {
+		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
+		useCreateChat(usersIds).then(() => {
+		}).catch(error => {
+			console.error(error.response);
 		});
 	}
 
@@ -56,7 +63,7 @@ const Chat = () => {
 				<div className="chat__bg"></div>
 
 				<Header
-					user={loggedInUser}
+					user={loggedInUserId}
 					openProfileSidebar={() => openSidebar(setShowProfileSidebar)}
 				/>
 				<div className="chat__content">
@@ -84,7 +91,7 @@ const Chat = () => {
 				active={showProfileSidebar}
 				closeSidebar={() => setShowProfileSidebar(false)}
 			>
-				<Profile user={loggedInUser} closeSidebar={() => setShowProfileSidebar(false)}/>
+				<Profile user={loggedInUserId} closeSidebar={() => setShowProfileSidebar(false)}/>
 			</ChatSidebar>
 			</div>
 	);

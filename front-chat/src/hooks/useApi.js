@@ -20,7 +20,10 @@ export function useUpdateProfile(userCredentials) {
     return Axios.patch('/users/me', userCredentials)      
 }
 export function useGetChat(userIds) {
-    return Axios.get('/chat/:id', userIds)
+    return Axios.post('/chats', userIds)
+}
+export function useCreateChat(userIds) {
+    return Axios.put('/chats', userIds)
 }
 
 

@@ -16,8 +16,8 @@ exports.getChatByUsers = async (req, res) => {
 		const { userIds } = req.body;
 
 		// Vérifiez que userIds est défini et est une chaîne
-		if (!userIds || typeof userIds !== "string") {
-			return res.status(400).json({ message: "Invalid userIds" });
+		if (!userIds) {
+			return res.status(400).json({ message: "Invalid userIds 1" });
 		}
 
 		// Convertissez la chaîne JSON en tableau d'entiers
@@ -25,7 +25,7 @@ exports.getChatByUsers = async (req, res) => {
 		try {
 			userIdsArray = JSON.parse(userIds);
 		} catch (error) {
-			return res.status(400).json({ message: "Invalid userIds" });
+			return res.status(400).json({ message: "Invalid userIds 2" });
 		}
 
 		// Vérifiez que les identifiants sont du bon type (entier)
@@ -34,7 +34,7 @@ exports.getChatByUsers = async (req, res) => {
 		if (userIdsInt.length !== userIdsArray.length) {
 			// Certains identifiants ne sont pas des entiers valides
 			const invalidUserIds = userIdsArray.filter((id) => !userIdsInt.includes(parseInt(id)));
-			return res.status(400).json({ message: "Invalid userIds", invalidUserIds });
+			return res.status(400).json({ message: "Invalid userIds 3", invalidUserIds });
 		}
 
 		// Vérifiez si tous les utilisateurs existent
@@ -47,7 +47,7 @@ exports.getChatByUsers = async (req, res) => {
 		if (usersExist.length !== userIdsInt.length) {
 			// Certains utilisateurs n'existent pas
 			const invalidUserIds = userIdsInt.filter((id) => !usersExist.some((user) => user.id === id));
-			return res.status(400).json({ message: "Invalid userIds", invalidUserIds });
+			return res.status(400).json({ message: "Invalid userIds 4", invalidUserIds });
 		}
 
 		// Vérifiez si un chat existe déjà entre les deux utilisateurs
@@ -56,7 +56,7 @@ exports.getChatByUsers = async (req, res) => {
 				id: {
 					[Op.in]: [
 						sequelize.literal(
-							`SELECT ChatId FROM UserChat WHERE UserId IN (${userIdsArray.join(
+							`SELECT ChatId FROM Userchat WHERE UserId IN (${userIdsArray.join(
 								","
 							)}) GROUP BY ChatId HAVING COUNT(DISTINCT UserId) = ${userIdsArray.length}`
 						),
@@ -66,7 +66,7 @@ exports.getChatByUsers = async (req, res) => {
 		});
 
 		if (!existingChat) {
-			return res.status(400).json({ message: "Aucun chat existe entre les utilisateurs" });
+			return res.status(400).json({ message: "Aucun chat existe entre les utilisateurs", status: 400});
 		}
 
 		/** Chat trouvé & réponse */
@@ -121,7 +121,7 @@ exports.createChat = async (req, res) => {
 				id: {
 					[Op.in]: [
 						sequelize.literal(
-							`SELECT ChatId FROM UserChat WHERE UserId IN (${userIdsArray.join(
+							`SELECT ChatId FROM Userchat WHERE UserId IN (${userIdsArray.join(
 								","
 							)}) GROUP BY ChatId HAVING COUNT(DISTINCT UserId) = ${userIdsArray.length}`
 						),
