@@ -21,7 +21,7 @@ const Chat = () => {
 
 	useEffect(() => {
 		GetChat();
-	}, []);
+	}, [interlocutorId]);
 
 	const GetChat = () => {
 		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
@@ -36,10 +36,7 @@ const Chat = () => {
 
 	const CreateChat = () => {
 		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
-		useCreateChat(usersIds).then(() => {
-		}).catch(error => {
-			console.error(error.response);
-		});
+		useCreateChat(usersIds);
 	}
 
 	const openSidebar = (cb) => {
