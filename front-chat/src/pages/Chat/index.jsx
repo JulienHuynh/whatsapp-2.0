@@ -46,7 +46,8 @@ const Chat = () => {
 	}
 
 	const UpdateMessage = (editedMessageId, newMessage) => {
-		useUpdateMessage(editedMessageId, {content: newMessage}).then(() => {
+		useUpdateMessage(editedMessageId, {content: newMessage}).then((response) => {
+			socket.emit('updateMessage', response.data.data);
 			setMessages(messages.map((message) => {
 				if (message.id === editedMessageId) {
 					return { ...message, content: newMessage, updatedAt: new Date() };
@@ -81,13 +82,26 @@ const Chat = () => {
 	};
 
 	useEffect(() => {
-		// Écoutez les nouveaux messages du serveur
+		// Écoute des nouveaux messages du serveur
 		socket.on('messageToDispatch', (newMessage) => {
 			setMessages((prevMessages) => [...prevMessages, newMessage]);
 		});
 
+		socket.on('updatedMessageToDispatch', (newMessage) => {
+			setMessages(messages.map((message) => {
+				if (message.id === newMessage.id) {
+					return { ...message, content: newMessage.content, updatedAt: newMessage.updatedAt };
+				}
+				return message;
+			}));
+		});
+
+		socket.on('deletedMessageToDispatch', (messageId) => {
+			setMessages(messages.filter((message) => message.id !== messageId));
+		});
+
 		return () => {
-			// Nettoyez le gestionnaire d'événements lors du démontage du composant
+			// Nettoyage du gestionnaire d'événements lors du démontage du composant
 			socket.off('messageToDispatch');
 		};
 	}, [submitNewMessage]);

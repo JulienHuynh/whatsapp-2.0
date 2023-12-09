@@ -63,6 +63,14 @@ io.on('connection', (socket) => {
 		io.emit('messageToDispatch', message);
 	});
 
+	socket.on('updateMessage', (message) => {
+		io.emit('updatedMessageToDispatch', message);
+	});
+
+	socket.on('deleteMessage', (messageId) => {
+		io.emit('deletedMessageToDispatch', messageId);
+	});
+
 	socket.on('disconnect', () => {
 		console.log('User disconnected');
 	});

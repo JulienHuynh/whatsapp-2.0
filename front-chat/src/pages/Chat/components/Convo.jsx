@@ -2,12 +2,15 @@ import Icon from "components/Icon";
 import React from "react";
 import formatTime from "../../../utils/formatTime";
 import {useDeleteMessage} from "../../../hooks/useApi";
+import {useSocketContext} from "../../../context/socketContext";
 
 const Convo = ({ messages, setMessages, loggedInUserId , setEditMode, setEditedMessageId, setNewMessage }) => {
+	const socket = useSocketContext();
 
 	const DeleteMessage = (messageId) => {
 		useDeleteMessage(messageId).then(() => {
 			setMessages(messages.filter((message) => message.id !== messageId));
+			socket.emit('deleteMessage', messageId);
 		});
 	}
 
