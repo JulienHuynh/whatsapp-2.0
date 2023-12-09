@@ -6,7 +6,7 @@ import ChatSidebar from "./components/ChatSidebar";
 import Icon from "components/Icon";
 import Profile from "./components/Profile";
 import {useParams} from "react-router-dom";
-import {useCreateChat, useGetChat} from "../../hooks/useApi";
+import {useCreateChat, useCreateMessages, useGetChat} from "../../hooks/useApi";
 import Cookies from "js-cookie";
 import Convo from "./components/Convo";
 
@@ -17,6 +17,7 @@ const Chat = () => {
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
+	const [newChatId, setChatId] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const loggedInUserId = parseInt(Cookies.get("user_id"));
 
@@ -27,8 +28,8 @@ const Chat = () => {
 	const GetChat = () => {
 		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
 		useGetChat(usersIds).then((response) => {
+			setChatId(response.data.data.id)
 			setMessages(response.data.data.Messages);
-			console.log(response)
 		}).catch(error => {
 			if (error.response.data.status === 400) {
 				CreateChat();
@@ -47,9 +48,11 @@ const Chat = () => {
 	};
 
 	const submitNewMessage = () => {
-		// addNewMessage(user.id, newMessage);
-		// setNewMessage("");
-		// scrollToLastMsg();
+		 
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		useCreateMessages({content:newMessage,chatId:newChatId})
+		setNewMessage("");
+		 
 	};
 
 	return (
