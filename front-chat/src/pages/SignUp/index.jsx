@@ -15,7 +15,7 @@ export default function SignUp() {
   const [authToken, setAuthToken] = useContext(jwtAuthTokenContext);
   const navigate = useNavigate();
 
-  const LoginFunction = (event) => {
+  const RegisterFunction = (event) => {
     event.preventDefault();
     useSignUp({ email, password, lastname, firstname }).then((response) => {
  
@@ -26,6 +26,8 @@ export default function SignUp() {
         setAuthToken(response.data.token);
         navigate("/");
       }
+    }).catch(error => {
+      setErrorMessage(error.response.data.message);
     });
   };
 
@@ -74,7 +76,7 @@ export default function SignUp() {
                 )}
                 <button
                   className={"submit-btn"}
-                  onClick={(e) => LoginFunction(e)}
+                  onClick={(e) => RegisterFunction(e)}
                 >
                   S'inscrire
                 </button>

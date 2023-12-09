@@ -13,6 +13,9 @@ export function useSignUp(userCredentials) {
 export  function useSignIn(userCredentials) {
     return Axios.post('/auth/login', userCredentials)      
 }
+export  function useGetUsers() {
+    return Axios.get('/users')
+}
 export function useUpdateProfile(userCredentials) {
     return Axios.patch('/users/me', userCredentials)      
 }

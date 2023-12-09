@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken");
 const DB = require("../db.config");
 const User = DB.User;
+bcrypt = require("bcryptjs");
 
 exports.login = async (req, res) => {
 	try {
@@ -19,23 +20,26 @@ exports.login = async (req, res) => {
 			return res.status(404).json({ message: `Utilisateur Introuvable.` });
 		}
 
-		/** Vérification du mot de passe */
-		let test = User.checkPassword(password, user.password);
-		if (!test) {
-			return res.status(401).json({ message: "Mot de passe érroné." });
-		}
+		bcrypt.compare(password, user.password)
+			.then(test => {
+				if(!test){
+					return res.status(401).json({ message: 'Mot de passe érroné'})
+				}
 
-		/** Charge Utile */
-		const payload = {
-			id: user.id,
-			firstname: user.firstname,
-			lastname: user.lastname,
-			email: user.email,
-		};
-		/** Génération du token & réponse */
-		const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_DURING });
+				// Génération du token
+				const token = jwt.sign({
+					id: user.id,
+					firstname: user.firstname,
+					lastname: user.lastname,
+					email: user.email
+				}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_DURING})
 
-		return res.json({ access_token: token });
+				return res.json({access_token: token})
+
+
+			})
+			.catch(err => res.status(500).json({message: 'Login process failed', error: err}))
+
 	} catch (err) {
 		res.status(500).json({ message: "Erreur de Base de Données.", error: err });
 	}
@@ -62,6 +66,6 @@ exports.register = async (req, res) => {
 
 		return res.json({ message: "Votre compte a bien été crée.", data: user });
 	} catch (err) {
-		res.status(500).json({ message: "Erreur de base de données.", error: err });
+		res.status(500).json({ message: "Erreur de base de données", error: err });
 	}
 };

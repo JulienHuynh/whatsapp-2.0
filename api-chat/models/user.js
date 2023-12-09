@@ -1,5 +1,6 @@
 /** Import des module nécessaires */
 const { DataTypes } = require("sequelize");
+const bcrypt = require('bcryptjs')
 
 /** Définition du modèle */
 module.exports = (sequelize) => {
@@ -43,11 +44,6 @@ module.exports = (sequelize) => {
 		let hash = await bcrypt.hash(user.password, parseInt(process.env.BCRYPT_SALT_ROUND));
 		user.password = hash;
 	});
-
-	/* Méthode de vérification de mot de passe */
-	User.checkPassword = async (password, original) => {
-		return await bcrypt.compare(password, original);
-	};
 
 	return User;
 };

@@ -18,17 +18,15 @@ export default function Login() {
     event.preventDefault();
 
     useSignIn({ email, password }).then((response) => {
-      if (response.status !== 200) {
-        setErrorMessage(response.message);
-      } else {
-        if (response.data.token) {
-          Cookies.set("authToken", response.data.token, { expires: 1 / 24 });
+        if (response.data.access_token) {
+          Cookies.set("authToken", response.data.access_token, { expires: 1 / 24 });
+          setErrorMessage("");
+          setAuthToken(response.data.access_token);
+          navigate("/");
         }
-        setErrorMessage("");
-        setAuthToken(response.data.token);
-        navigate("/");
-      }
-    });
+    }).catch(error => {
+      setErrorMessage(error.response.data.message);
+    });;
   };
 
   return (
@@ -65,7 +63,7 @@ export default function Login() {
                   Se connecter
                 </button>
                 <p className="go-sub">
-                  <p>Pas encore de compte ?</p>
+                  Pas encore de compte ?
                   <Link to={"/inscription"}>Inscrivez-vous !</Link>
                 </p>
               </div>
