@@ -9,7 +9,7 @@ let router = express.Router()
 /** Routage de la ressource Chat */
 router.get('', chatController.getMyChats)
 
-router.get('/:id', chatController.getChat)
+router.get('/:id', chatController.getChatByUsers)
 
 router.put('', chatController.createChat)
 

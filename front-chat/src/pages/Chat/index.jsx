@@ -10,30 +10,30 @@ import { useUsersContext } from "context/usersContext";
 import pp from "../../assets/images/default-pp.png";
 import Sidebar from "../../components/Sidebar";
 import {useParams} from "react-router-dom";
+import {useGetChat} from "../../hooks/useApi";
 
-const Chat = ({ history }) => {
-	const { users, setUserAsUnread, addNewMessage } = useUsersContext();
+const Chat = () => {
 
 	const userId = useParams().id;
-	let user = users.filter((user) => user.id === Number(userId))[0];
 
 	const lastMsgRef = useRef(null);
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
-	const [loggedInUser, setLoggedInUser] = useState({id: 2, profile_picture: pp, firstName: "Le rappeur", lastName: "damso", email: "lemaildedamso@gmail.com"});
+	const [loggedInUser, setLoggedInUser] = useState({id: 2, firstname: "Le rappeur", lastname: "damso", email: "lemaildedamso@gmail.com"});
 
 	useEffect(() => {
-		if (!user) history.push("/");
-		else {
-			scrollToLastMsg();
-			setUserAsUnread(user.id);
-		}
+		GetChat();
 	}, []);
 
-	useEffect(() => {
-		user && scrollToLastMsg();
-	}, [users]);
+	const GetChat = () => {
+		let usersIds = [loggedInUser.id, userId];
+		useGetChat({ usersIds }).then((response) => {
+			console.log(response)
+		}).catch(error => {
+			console.error(error.response.data.message);
+		});
+	}
 
 	const openSidebar = (cb) => {
 		setShowProfileSidebar(false);
@@ -45,9 +45,9 @@ const Chat = ({ history }) => {
 	};
 
 	const submitNewMessage = () => {
-		addNewMessage(user.id, newMessage);
-		setNewMessage("");
-		scrollToLastMsg();
+		// addNewMessage(user.id, newMessage);
+		// setNewMessage("");
+		// scrollToLastMsg();
 	};
 
 	return (
@@ -56,11 +56,11 @@ const Chat = ({ history }) => {
 				<div className="chat__bg"></div>
 
 				<Header
-					user={user}
+					user={loggedInUser}
 					openProfileSidebar={() => openSidebar(setShowProfileSidebar)}
 				/>
 				<div className="chat__content">
-					<Convo lastMsgRef={lastMsgRef} messages={user.messages} />
+					{/*<Convo lastMsgRef={lastMsgRef} messages={user.messages} />*/}
 				</div>
 				<footer className="chat__footer">
 					<button
