@@ -272,9 +272,10 @@
 }
 
 .chat__msg-options-icon {
-    color: rgb(145, 145, 145);
+    color: rgb(220, 220, 220);
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 
 /* End Chat Content */
@@ -712,6 +713,25 @@
 .profile__about-item {
     width: 100%;
     cursor: text;
+}
+
+.chat__msg-options-menu {
+    z-index: 999;
+    position: absolute;
+    right: -5px;
+    top: 31px;
+    color: white;
+    background: rgb(29, 155, 240);
+}
+
+.chat__msg-options-menu button{
+    color: white;
+    padding: 8px 15px;
+    width: 100%;
+}
+
+.chat__msg-options-menu button:hover {
+    background: black;
 }
 
 /* End  Chat Sidebar */

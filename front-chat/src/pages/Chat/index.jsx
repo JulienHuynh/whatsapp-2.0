@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/main.css";
 import ChatInput from "./components/ChatInput";
 import Header from "./components/Header";
 import ChatSidebar from "./components/ChatSidebar";
-import Icon from "components/Icon";
 import Profile from "./components/Profile";
 import {useParams} from "react-router-dom";
-import {useCreateChat, useCreateMessages, useGetChat} from "../../hooks/useApi";
+import {useCreateChat, useCreateMessages, useGetChat, useUpdateMessage} from "../../hooks/useApi";
 import Cookies from "js-cookie";
 import Convo from "./components/Convo";
 
@@ -20,6 +19,8 @@ const Chat = () => {
 	const [newChatId, setChatId] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const loggedInUserId = parseInt(Cookies.get("user_id"));
+	const [editMode, setEditMode] = useState(false);
+	const [editedMessageId, setEditedMessageId] = useState(null);
 
 	useEffect(() => {
 		GetChat();
@@ -42,17 +43,43 @@ const Chat = () => {
 		useCreateChat(usersIds);
 	}
 
+	const UpdateMessage = (editedMessageId, newMessage) => {
+		useUpdateMessage(editedMessageId, {content: newMessage}).then(() => {
+			setMessages(messages.map((message) => {
+				if (message.id === editedMessageId) {
+					return { ...message, content: newMessage, updatedAt: new Date() };
+				}
+				return message;
+			}));
+		});
+	}
+
 	const openSidebar = (cb) => {
 		setShowProfileSidebar(false);
 		cb(true);
 	};
 
 	const submitNewMessage = () => {
-		 
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		useCreateMessages({content:newMessage,chatId:newChatId})
+		 if (editMode) {
+			 UpdateMessage(editedMessageId, newMessage);
+		 } else {
+			 // eslint-disable-next-line react-hooks/rules-of-hooks
+			 useCreateMessages({content: newMessage, chatId: newChatId})
+		 }
+	    setEditMode(false)
+		setEditedMessageId(null)
 		setNewMessage("");
-		 
+	};
+
+	const handleMessages = (newMessages) => {
+		setMessages(newMessages);
+	};
+
+	const handleEditMode = () => {
+		setEditMode(!editMode)
+	};
+	const handleEditedMessageId = (editedMessageId) => {
+		setEditedMessageId(editedMessageId)
 	};
 
 	return (
@@ -65,7 +92,13 @@ const Chat = () => {
 					openProfileSidebar={() => openSidebar(setShowProfileSidebar)}
 				/>
 				<div className="chat__content">
-					<Convo messages={messages} loggedInUserId={loggedInUserId}/>
+					<Convo messages={messages}
+						   loggedInUserId={loggedInUserId}
+						   setMessages={handleMessages}
+						   setEditMode={handleEditMode}
+						   setEditedMessageId={handleEditedMessageId}
+						   setNewMessage={setNewMessage}
+					/>
 				</div>
 				<footer className="chat__footer">
 					{/*<button*/}

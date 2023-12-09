@@ -1,8 +1,21 @@
 import Icon from "components/Icon";
 import React from "react";
 import formatTime from "../../../utils/formatTime";
+import {useDeleteMessage} from "../../../hooks/useApi";
 
-const Convo = ({ messages, loggedInUserId }) => {
+const Convo = ({ messages, setMessages, loggedInUserId , setEditMode, setEditedMessageId, setNewMessage }) => {
+
+	const DeleteMessage = (messageId) => {
+		useDeleteMessage(messageId).then(() => {
+			setMessages(messages.filter((message) => message.id !== messageId));
+		});
+	}
+
+	const UpdateMessage = (messageId, content) => {
+		setEditMode(true);
+		setEditedMessageId(messageId);
+		setNewMessage(content);
+	}
 
 	return (
 		<div className="chat__msg-group">
@@ -10,38 +23,37 @@ const Convo = ({ messages, loggedInUserId }) => {
 				<React.Fragment key={msgIndex}>
 					{ message.UserId !== loggedInUserId ? (
 						<div className="chat__msg chat__msg--rxd">
-							<p>
+							<div>
 								<span>{message.content}</span>
-								<span className="chat__msg-filler"> </span>
-
-								<button
-									aria-label="Message options"
-									className="chat__msg-options"
-								>
-									<Icon id="downArrow" className="chat__msg-options-icon" />
-								</button>
-							</p>
+								<span className="chat__msg-filler"></span>
+							</div>
 							<span className="chat__msg-footer-left">
-									{formatTime(message.createdAt)}
+									{message.createdAt !== message.updatedAt ?
+										formatTime(message.updatedAt) + " (modifié)" :
+										formatTime(message.createdAt)
+									}
 							</span>
 						</div>
-
 						) : (
 							<div className="chat__msg chat__msg--sent">
-								<p>
+								<div>
 									<span>{message.content}</span>
-									<span className="chat__msg-filler"> </span>
-									<span className="chat__msg-footer">
-								</span>
-									<button
-										aria-label="Message options"
-										className="chat__msg-options"
-									>
-										<Icon id="downArrow" className="chat__msg-options-icon" />
-									</button>
-								</p>
+									<span className="chat__msg-filler"></span>
+									<div aria-label="Message options" className="chat__msg-options">
+										<div>
+											<Icon id="downArrow" className="chat__msg-options-icon" />
+											<div className="chat__msg-options-menu">
+												<button onClick={() => DeleteMessage(message.id)}>Supprimer</button>
+												<button onClick={() => UpdateMessage(message.id, message.content)}>Modifier</button>
+											</div>
+										</div>
+									</div>
+								</div>
 								<span className="chat__msg-footer-right">
-									{formatTime(message.createdAt)}
+									{message.createdAt !== message.updatedAt ?
+										formatTime(message.updatedAt) + " (modifié)" :
+										formatTime(message.createdAt)
+									}
 								</span>
 							</div>
 						)}

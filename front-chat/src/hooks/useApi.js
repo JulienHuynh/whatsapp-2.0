@@ -32,6 +32,12 @@ export function useCreateChat(userIds) {
 export function useCreateMessages(content,chatId) {
     return Axios.put('/messages', content,chatId)
 }
+export function useDeleteMessage(messageId) {
+    return Axios.delete(`/messages/${messageId}`)
+}
+export function useUpdateMessage(messageId, content) {
+    return Axios.patch(`/messages/${messageId}`, content)
+}
 
 
 let isLogged = () => {
