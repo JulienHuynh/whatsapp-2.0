@@ -34,7 +34,7 @@ exports.getUser = async (req, res) => {
 exports.updateMyProfile = async (req, res) => {
     try{
         const { lastname, firstname, email } = req.body;
-
+      
         /** Validation des données reçues */
         if(!email || !firstname || !lastname){
             return res.status(400).json({ message: 'Paramètres manquants'})

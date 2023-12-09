@@ -1,5 +1,6 @@
 /** Import des module nécessaires */
 const { DataTypes } = require("sequelize");
+const bcrypt = require("bcryptjs");
 
 /** Définition du modèle */
 module.exports = (sequelize) => {

@@ -16,6 +16,9 @@ export  function useSignIn(userCredentials) {
 export function useUpdateProfile(userCredentials) {
     return Axios.patch('/users/me', userCredentials)      
 }
+export function usegetUser(id) {
+    return Axios.patch(`/users/${id}`)      
+}
 
 
 let isLogged = () => {

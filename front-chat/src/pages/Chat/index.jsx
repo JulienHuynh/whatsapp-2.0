@@ -10,6 +10,7 @@ import { useUsersContext } from "context/usersContext";
 import pp from "../../assets/images/default-pp.png";
 import Sidebar from "../../components/Sidebar";
 import {useParams} from "react-router-dom";
+import { usegetUser } from "hooks/useApi";
 
 const Chat = ({ history }) => {
 	const { users, setUserAsUnread, addNewMessage } = useUsersContext();
@@ -22,6 +23,20 @@ const Chat = ({ history }) => {
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
 	const [loggedInUser, setLoggedInUser] = useState({id: 2, profile_picture: pp, firstName: "Le rappeur", lastName: "damso", email: "lemaildedamso@gmail.com"});
+
+
+	const getUser = () => {
+	
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		usegetUser(email).then((response) => {
+		  if (response.status !== 200) {
+			alert(response.message);
+		  } else {
+			alert("Modification enregistré");
+			closeSidebar();
+		  }
+		});
+	  };
 
 	useEffect(() => {
 		if (!user) history.push("/");

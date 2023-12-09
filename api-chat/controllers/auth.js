@@ -8,6 +8,10 @@ exports.login = async (req, res) => {
     try{
         const { email, password } = req.body;
 
+        
+        console.log(email, password,req.body)
+
+
         /** Validation des données reçues */ 
         if(!email || !password){
             return res.status(400).json({ message: 'Email ou mot de passe erroné.' })
@@ -33,18 +37,27 @@ exports.login = async (req, res) => {
             lastname: user.lastname,
             email: user.email
         }
+
+
+        
         /** Génération du token & réponse */
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_DURING})
 
-        return res.json({access_token: token})
+        return res.json({token: token, status: 200})
     } catch (err) {
         res.status(500).json({ message: "Erreur de Base de Données.", error: err });
     }
 }
 
 exports.register = async (req, res) => {
+
+ 
+
     try{
         const { firstname, lastname, email, password } = req.body
+        
+
+        console.log(firstname, lastname,email, password,req.body)
 
         /** Validation des données reçues */ 
         if( !firstname || !lastname || !email || !password ){
@@ -59,7 +72,7 @@ exports.register = async (req, res) => {
         }
 
         /** Création du compte & réponse */
-        await User.create(req.body);
+        user = await User.create(req.body);
 
         return res.json({ message: 'Votre compte a bien été crée.', data: user })
     } catch (err) {
