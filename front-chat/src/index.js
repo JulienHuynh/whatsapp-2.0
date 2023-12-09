@@ -5,7 +5,6 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import "./assets/css/index.css";
-import { UsersProvider } from "context/usersContext";
 import { SocketProvider } from "context/socketContext";
 import JwtAuthTokenContext from "context/jwtAuthTokenContext";
 import ErrorMessageContext from "context/errorMessageContext";
@@ -17,9 +16,7 @@ root.render(
         <JwtAuthTokenContext>
             <ErrorMessageContext>
                 <SocketProvider>
-                    <UsersProvider>
                         <App />
-                    </UsersProvider>
                 </SocketProvider>
             </ErrorMessageContext>
         </JwtAuthTokenContext>

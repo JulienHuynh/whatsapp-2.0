@@ -1,16 +1,12 @@
 import React from "react";
 import Icon from "components/Icon";
 import {Link} from "react-router-dom";
-import {useUsersContext} from "context/usersContext";
-import getRandomSentence from "../../utils/getRandomSentence";
 import pp from "assets/images/default-pp.png";
 
 const Contact = ({ contact }) => {
-	const { setUserAsUnread } = useUsersContext();
 	const getLastMessage = () => {
 		return {
-			content: getRandomSentence(),
-			sender: 2,
+			content: "Le dernier message envoyé dans le chat, la fonction n'est pas encore implémentée.",
 			time: "08:11:26",
 		};
 	};
@@ -21,7 +17,6 @@ const Contact = ({ contact }) => {
 		<Link
 			className="sidebar-contact"
 			to={`/chat/${contact.id}`}
-			onClick={() => setUserAsUnread(contact.id)}
 		>
 			<div className="sidebar-contact__avatar-wrapper">
 				<img
