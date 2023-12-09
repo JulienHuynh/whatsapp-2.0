@@ -8,11 +8,13 @@ import {useParams} from "react-router-dom";
 import {useCreateChat, useCreateMessages, useGetChat, useUpdateMessage} from "../../hooks/useApi";
 import Cookies from "js-cookie";
 import Convo from "./components/Convo";
+import { useSocketContext } from "context/socketContext";
 
 const Chat = () => {
 
 	const interlocutorId = parseInt(useParams().id);
 
+	const socket = useSocketContext();
 	const [showAttach, setShowAttach] = useState(false);
 	const [showProfileSidebar, setShowProfileSidebar] = useState(false);
 	const [newMessage, setNewMessage] = useState("");
@@ -54,6 +56,16 @@ const Chat = () => {
 		});
 	}
 
+	const CreateMessage = (newMessage, newChatId) => {
+		let message = {};
+		useCreateMessages({content: newMessage, chatId: newChatId}).then((response) => {
+			message = { ...response.data.data, UserId: loggedInUserId};
+			setMessages((prevMessages) => [...prevMessages, message]);
+		});
+
+		return message;
+	}
+
 	const openSidebar = (cb) => {
 		setShowProfileSidebar(false);
 		cb(true);
@@ -63,13 +75,25 @@ const Chat = () => {
 		 if (editMode) {
 			 UpdateMessage(editedMessageId, newMessage);
 		 } else {
-			 // eslint-disable-next-line react-hooks/rules-of-hooks
-			 useCreateMessages({content: newMessage, chatId: newChatId})
+			 let message = CreateMessage(newMessage, newChatId);
+			 socket.emit('newMessage', message);
 		 }
 	    setEditMode(false)
 		setEditedMessageId(null)
 		setNewMessage("");
 	};
+
+	useEffect(() => {
+		// Écoutez les nouveaux messages du serveur
+		socket.on('messageToDispatch', (newMessage) => {
+			setMessages((prevMessages) => [...prevMessages, newMessage]);
+		});
+
+		return () => {
+			// Déconnectez le socket lorsque le composant est démonté
+			socket.disconnect();
+		};
+	}, [submitNewMessage]);
 
 	const handleMessages = (newMessages) => {
 		setMessages(newMessages);

@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import io from "socket.io-client";
 
 const SOCKET_URL = window.location.origin.includes("localhost")
-	? "http://localhost:3000"
+	? "http://localhost:8245"
 	: `${process.env.REACT_APP_API_URL}`;
 
 const socket = io.connect(SOCKET_URL);
