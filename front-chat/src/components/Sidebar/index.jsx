@@ -1,11 +1,24 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./styles/main.css";
 import avatar from "assets/images/default-pp.png";
 import Contact from "./Contact";
-import { useUsersContext } from "context/usersContext";
+import {useGetUsers} from "../../hooks/useApi";
 
 const Sidebar = () => {
-	const { users: contacts } = useUsersContext();
+	const [contacts, setContacts] = useState([]);
+
+	useEffect(() => {
+		GetUsersList();
+	}, []);
+
+	const GetUsersList = (event) => {
+		useGetUsers().then((response) => {
+			setContacts(response.data.data);
+		}).catch(error => {
+			console.error(error.response.data.message);
+		});
+	};
+
 	return (
 		<aside className="sidebar">
 			<header className="header">

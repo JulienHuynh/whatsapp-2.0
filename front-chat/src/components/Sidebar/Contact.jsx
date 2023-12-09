@@ -3,6 +3,7 @@ import Icon from "components/Icon";
 import {Link} from "react-router-dom";
 import {useUsersContext} from "context/usersContext";
 import getRandomSentence from "../../utils/getRandomSentence";
+import pp from "assets/images/default-pp.png";
 
 const Contact = ({ contact }) => {
 	const { setUserAsUnread } = useUsersContext();
@@ -24,14 +25,14 @@ const Contact = ({ contact }) => {
 		>
 			<div className="sidebar-contact__avatar-wrapper">
 				<img
-					src={contact.profile_picture}
-					alt={contact.profile_picture}
+					src={pp}
+					alt={pp}
 					className="avatar"
 				/>
 			</div>
 			<div className="sidebar-contact__content">
 				<div className="sidebar-contact__top-content">
-					<h2 className="sidebar-contact__name"> {contact.name} </h2>
+					<h2 className="sidebar-contact__name"> {contact.firstname} {contact.lastname} </h2>
 					<span className="sidebar-contact__time">
 						{lastMessage.time}
 					</span>
@@ -60,12 +61,12 @@ const Contact = ({ contact }) => {
 						</span>
 					</p>
 					<div className="sidebar-contact__icons">
-						{contact.pinned && (
-							<Icon id="pinned" className="sidebar-contact__icon" />
-						)}
-						{!!contact.unread && (
-							<span className="sidebar-contact__unread">{contact.unread}</span>
-						)}
+						{/*{contact.pinned && (*/}
+						{/*	<Icon id="pinned" className="sidebar-contact__icon" />*/}
+						{/*)}*/}
+						{/*{!!contact.unread && (*/}
+						{/*	<span className="sidebar-contact__unread">{contact.unread}</span>*/}
+						{/*)}*/}
 						<button aria-label="sidebar-contact__btn">
 							<Icon
 								id="downArrow"
