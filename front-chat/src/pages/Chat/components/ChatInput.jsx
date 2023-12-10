@@ -48,6 +48,7 @@ const ChatInput = ({
 				</div>
 			</div>
 			<input
+				id={"messageInput"}
 				className="chat__input"
 				placeholder="Type a message"
 				value={newMessage}

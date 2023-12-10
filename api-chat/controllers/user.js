@@ -41,7 +41,7 @@ exports.updateMyProfile = async (req, res) => {
 		}
 
 		let user = await User.findOne({ where: { email: email }, raw: true });
-		if (user !== null) {
+		if (user !== null && user.id !== req.decodedToken.id) {
 			return res.status(409).json({ message: "Adresse Email déja utilisée" });
 		}
 

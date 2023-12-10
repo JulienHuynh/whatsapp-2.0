@@ -58,17 +58,21 @@ const io = socketIO(server, {
 io.on('connection', (socket) => {
 	console.log('A user connected');
 
-	socket.on('newMessage', (message) => {
-		console.log('New message received', message);
-		io.emit('messageToDispatch', message);
+	socket.on('joinRoom', (chatId) => {
+		console.log(`User joined room ${chatId}`)
+		socket.join(chatId);
 	});
 
-	socket.on('updateMessage', (message) => {
-		io.emit('updatedMessageToDispatch', message);
+	socket.on('newMessage', (data) => {
+		io.to(data.chatId).emit('messageToDispatch', {message: data.message, chatId: data.chatId});
 	});
 
-	socket.on('deleteMessage', (messageId) => {
-		io.emit('deletedMessageToDispatch', messageId);
+	socket.on('updateMessage', (data) => {
+		io.to(data.chatId).emit('updatedMessageToDispatch', {message: data.message, chatId: data.chatId});
+	});
+
+	socket.on('deleteMessage', (data) => {
+		io.to(data.chatId).emit('deletedMessageToDispatch', {messageId: data.messageId, chatId: data.chatId});
 	});
 
 	socket.on('disconnect', () => {

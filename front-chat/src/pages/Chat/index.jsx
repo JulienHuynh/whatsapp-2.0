@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "./styles/main.css";
 import ChatInput from "./components/ChatInput";
 import Header from "./components/Header";
@@ -23,8 +23,16 @@ const Chat = () => {
 	const loggedInUserId = parseInt(Cookies.get("user_id"));
 	const [editMode, setEditMode] = useState(false);
 	const [editedMessageId, setEditedMessageId] = useState(null);
+	const bottomRef = useRef(document.getElementById("bottomRef"));
+
+	const scrollToBottom = () => {
+		if (bottomRef.current) {
+			bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+		}
+	};
 
 	useEffect(() => {
+		setMessages([]);
 		GetChat();
 	}, [interlocutorId]);
 
@@ -33,21 +41,28 @@ const Chat = () => {
 		useGetChat(usersIds).then((response) => {
 			setChatId(response.data.data.id)
 			setMessages(response.data.data.Messages);
+			socket.emit('joinRoom', response.data.data.id);
 		}).catch(error => {
 			if (error.response.data.status === 400) {
 				CreateChat();
 			}
 		});
+
+		scrollToBottom();
 	}
 
 	const CreateChat = () => {
 		let usersIds = {userIds : `[${loggedInUserId},${interlocutorId}]`};
-		useCreateChat(usersIds);
+		useCreateChat(usersIds).then((response) => {
+			setChatId(response.data.data.id)
+			socket.emit('joinRoom', response.data.data.id);
+		});
+		console.log("Création de la salle")
 	}
 
 	const UpdateMessage = (editedMessageId, newMessage) => {
 		useUpdateMessage(editedMessageId, {content: newMessage}).then((response) => {
-			socket.emit('updateMessage', response.data.data);
+			socket.emit('updateMessage', {message: response.data.data, chatId: newChatId});
 			setMessages(messages.map((message) => {
 				if (message.id === editedMessageId) {
 					return { ...message, content: newMessage, updatedAt: new Date() };
@@ -61,7 +76,7 @@ const Chat = () => {
 		let message = {};
 		useCreateMessages({content: newMessage, chatId: newChatId}).then((response) => {
 			message = { ...response.data.data, UserId: loggedInUserId};
-			socket.emit('newMessage', message);
+			socket.emit('newMessage', {message: message, chatId: newChatId});
 		});
 	}
 
@@ -75,6 +90,7 @@ const Chat = () => {
 			 UpdateMessage(editedMessageId, newMessage);
 		 } else {
 			 CreateMessage(newMessage, newChatId);
+			 scrollToBottom();
 		 }
 	    setEditMode(false)
 		setEditedMessageId(null)
@@ -83,21 +99,27 @@ const Chat = () => {
 
 	useEffect(() => {
 		// Écoute des nouveaux messages du serveur
-		socket.on('messageToDispatch', (newMessage) => {
-			setMessages((prevMessages) => [...prevMessages, newMessage]);
+		socket.on('messageToDispatch', (data) => {
+			if (data.chatId === newChatId) {
+				setMessages((prevMessages) => [...prevMessages, data.message]);
+				scrollToBottom();
+			}
 		});
 
-		socket.on('updatedMessageToDispatch', (newMessage) => {
-			setMessages(messages.map((message) => {
-				if (message.id === newMessage.id) {
-					return { ...message, content: newMessage.content, updatedAt: newMessage.updatedAt };
-				}
-				return message;
-			}));
+		socket.on('updatedMessageToDispatch', (data) => {
+			if (data.chatId === newChatId) {
+				setMessages(messages.map((message) => {
+					if (message.id === data.message.id) {
+						return { ...message, content: data.message.content, updatedAt: data.message.updatedAt };
+					}
+					return message;
+				}));
+			}
 		});
 
-		socket.on('deletedMessageToDispatch', (messageId) => {
-			setMessages(messages.filter((message) => message.id !== messageId));
+		socket.on('deletedMessageToDispatch', (data) => {
+			if (data.chatId === newChatId)
+				setMessages(messages.filter((message) => message.id !== data.messageId));
 		});
 
 		return () => {
@@ -133,7 +155,9 @@ const Chat = () => {
 						   setEditMode={handleEditMode}
 						   setEditedMessageId={handleEditedMessageId}
 						   setNewMessage={setNewMessage}
+						   chatId={newChatId}
 					/>
+					<div id={"bottomRef"} ref={bottomRef}></div>
 				</div>
 				<footer className="chat__footer">
 					{/*<button*/}

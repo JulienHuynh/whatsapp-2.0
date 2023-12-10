@@ -4,13 +4,13 @@ import formatTime from "../../../utils/formatTime";
 import {useDeleteMessage} from "../../../hooks/useApi";
 import {useSocketContext} from "../../../context/socketContext";
 
-const Convo = ({ messages, setMessages, loggedInUserId , setEditMode, setEditedMessageId, setNewMessage }) => {
+const Convo = ({ messages, setMessages, loggedInUserId , setEditMode, setEditedMessageId, setNewMessage, chatId }) => {
 	const socket = useSocketContext();
 
 	const DeleteMessage = (messageId) => {
 		useDeleteMessage(messageId).then(() => {
 			setMessages(messages.filter((message) => message.id !== messageId));
-			socket.emit('deleteMessage', messageId);
+			socket.emit('deleteMessage', {messageId: messageId, chatId: chatId});
 		});
 	}
 
@@ -18,6 +18,13 @@ const Convo = ({ messages, setMessages, loggedInUserId , setEditMode, setEditedM
 		setEditMode(true);
 		setEditedMessageId(messageId);
 		setNewMessage(content);
+
+		// setTimeout pour assurer que le champ de saisie est rendu avant de définir la sélection
+		setTimeout(() => {
+			const input = document.getElementById("messageInput");
+			input.selectionStart = input.selectionEnd = input.value.length;
+			input.focus();
+		}, 0);
 	}
 
 	return (

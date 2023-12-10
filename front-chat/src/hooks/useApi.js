@@ -52,19 +52,12 @@ Axios.interceptors.request.use(request => {
     return request;
 });
 
-
-
-
-
-
-// Intercepteur de réponse API pour vérification de la session.
-// Axios.interceptors.response.use(response => {
-//     return response;
-// }, error => {
-//     if (error.response.status === 401 || error.response.status === 500) {
-//         accountService.logout();
-//         window.location = '/auth/login';
-//     } else {
-//         return Promise.reject(error);
-//     }
-// });
+Axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response.status === 401 && window.location.pathname !== "/se-connecter") {
+        window.location.reload();
+    } else {
+        return Promise.reject(error);
+    }
+});
