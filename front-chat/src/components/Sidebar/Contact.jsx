@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "components/Icon";
 import {Link} from "react-router-dom";
-import pp from "assets/images/default-pp.png";
+import pp from "assets/images/default-pp.jpeg";
 
 const Contact = ({ contact }) => {
 	const getLastMessage = () => {

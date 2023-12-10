@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useGetUser, useUpdateProfile} from "../../../hooks/useApi";
-import pp from "assets/images/default-pp.png";
+import pp from "assets/images/default-pp.jpeg";
 
 const Profile = ({ loggedInUserId, closeSidebar }) => {
   const [firstname, setFirstName] = useState("");

@@ -1,5 +1,6 @@
 import React from "react";
 import Icon from "components/Icon";
+import {useSocketContext} from "../../../context/socketContext";
 
 const attachButtons = [
 	{ icon: "attachRooms", label: "Choose room" },
@@ -15,12 +16,28 @@ const ChatInput = ({
 	newMessage,
 	setNewMessage,
 	submitNewMessage,
+	chatId,
+    loggedInUserId
 }) => {
+	const socket = useSocketContext();
+
 	const detectEnterPress = (e) => {
 		if (e.key === "Enter" || e.keyCode === 13) {
 			submitNewMessage();
 		}
 	};
+
+	const isTypingListener = (e) => {
+		setNewMessage(e.target.value);
+
+		if (e.target.value.length === 0) {
+			socket.emit('stopTyping', chatId);
+			return;
+		}
+
+		socket.emit('isTyping', {userId: loggedInUserId, chatId: chatId});
+	};
+
 	return (
 		<div className="chat__input-wrapper">	
 			<div className="pos-rel">
@@ -52,7 +69,7 @@ const ChatInput = ({
 				className="chat__input"
 				placeholder="Type a message"
 				value={newMessage}
-				onChange={(e) => setNewMessage(e.target.value)}
+				onChange={(e) => isTypingListener(e)}
 				onKeyDown={detectEnterPress}
 			/>
 			{newMessage ? (

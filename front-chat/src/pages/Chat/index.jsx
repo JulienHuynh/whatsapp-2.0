@@ -9,6 +9,8 @@ import {useCreateChat, useCreateMessages, useGetChat, useUpdateMessage} from "..
 import Cookies from "js-cookie";
 import Convo from "./components/Convo";
 import { useSocketContext } from "context/socketContext";
+import Icon from "../../components/Icon";
+import pp from "../../assets/images/default-pp.jpeg";
 
 const Chat = () => {
 
@@ -24,15 +26,20 @@ const Chat = () => {
 	const [editMode, setEditMode] = useState(false);
 	const [editedMessageId, setEditedMessageId] = useState(null);
 	const bottomRef = useRef(document.getElementById("bottomRef"));
+	const [isTyping, setIsTyping] = useState(false);
 
 	const scrollToBottom = () => {
-		if (bottomRef.current) {
-			bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-		}
+		setTimeout(() => {
+			if (bottomRef.current) {
+				bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+			}
+		}, 0);
 	};
 
 	useEffect(() => {
+		socket.emit('stopTyping', newChatId);
 		setMessages([]);
+		setIsTyping(false);
 		GetChat();
 	}, [interlocutorId]);
 
@@ -92,7 +99,9 @@ const Chat = () => {
 			 CreateMessage(newMessage, newChatId);
 			 scrollToBottom();
 		 }
-	    setEditMode(false)
+
+		socket.emit('stopTyping', newChatId);
+		setEditMode(false)
 		setEditedMessageId(null)
 		setNewMessage("");
 	};
@@ -122,8 +131,19 @@ const Chat = () => {
 				setMessages(messages.filter((message) => message.id !== data.messageId));
 		});
 
+		socket.on('isTypingDispatch', (data) => {
+			if (data.chatId === newChatId && data.userId !== loggedInUserId)
+				setIsTyping(true);
+		});
+
+		socket.on('stopTypingDispatch', (chatId) => {
+			if (chatId === newChatId)
+				setIsTyping(false);
+		});
+
 		return () => {
 			// Nettoyage du gestionnaire d'événements lors du démontage du composant
+			socket.off('isTypingDispatch');
 			socket.off('messageToDispatch');
 		};
 	}, [submitNewMessage]);
@@ -138,6 +158,14 @@ const Chat = () => {
 	const handleEditedMessageId = (editedMessageId) => {
 		setEditedMessageId(editedMessageId)
 	};
+
+	const Typing = () => (
+		<div className="typing">
+			<div className="typing__dot"></div>
+			<div className="typing__dot"></div>
+			<div className="typing__dot"></div>
+		</div>
+	)
 
 	return (
 		<div className="chat">
@@ -157,22 +185,30 @@ const Chat = () => {
 						   setNewMessage={setNewMessage}
 						   chatId={newChatId}
 					/>
+					<div> { isTyping ?
+						<div id={"isTyping"}>
+							<img src={pp} alt={"pp"} className="avatar isTypingAvatar" />
+							<Typing />
+						</div> : null }
+					</div>
 					<div id={"bottomRef"} ref={bottomRef}></div>
 				</div>
 				<footer className="chat__footer">
-					{/*<button*/}
-					{/*	className="chat__scroll-btn"*/}
-					{/*	aria-label="scroll down"*/}
-					{/*	onClick={scrollToLastMsg}*/}
-					{/*>*/}
-					{/*	<Icon id="downArrow" />*/}
-					{/*</button>*/}
+					<button
+						className="chat__scroll-btn"
+						aria-label="scroll down"
+						onClick={scrollToBottom}
+					>
+						<Icon id="downArrow" />
+					</button>
 					<ChatInput
 						showAttach={showAttach}
 						setShowAttach={setShowAttach}
 						newMessage={newMessage}
 						setNewMessage={setNewMessage}
 						submitNewMessage={submitNewMessage}
+						chatId={newChatId}
+						loggedInUserId={loggedInUserId}
 					/>
 				</footer>
 			</div>

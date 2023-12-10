@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {jwtAuthTokenContext} from "../../../context/jwtAuthTokenContext";
 import Cookies from "js-cookie";
 import {useLocation} from "react-router-dom";
-import pp from "assets/images/default-pp.png";
+import pp from "assets/images/default-pp.jpeg";
 import {useGetUser} from "../../../hooks/useApi";
 
 const Header = ({ interlocutorId, openProfileSidebar }) => {

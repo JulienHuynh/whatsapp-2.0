@@ -75,6 +75,14 @@ io.on('connection', (socket) => {
 		io.to(data.chatId).emit('deletedMessageToDispatch', {messageId: data.messageId, chatId: data.chatId});
 	});
 
+	socket.on('isTyping', (data) => {
+		io.to(data.chatId).emit('isTypingDispatch', {userId: data.userId, chatId: data.chatId});
+	});
+
+	socket.on('stopTyping', (chatId) => {
+		io.to(chatId).emit('stopTypingDispatch', chatId);
+	});
+
 	socket.on('disconnect', () => {
 		console.log('User disconnected');
 	});

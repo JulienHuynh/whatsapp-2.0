@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./styles/main.css";
-import avatar from "assets/images/default-pp.png";
+import logo from "assets/images/wa-icon.png";
 import Contact from "./Contact";
 import {useGetUsers} from "../../hooks/useApi";
 import Cookies from "js-cookie";
@@ -26,7 +26,7 @@ const Sidebar = () => {
 		<aside className="sidebar">
 			<header className="header">
 				<div className="sidebar__avatar-wrapper">
-					<img src={avatar} alt="Karen Okonkwo" className="avatar" />
+					<img src={logo} alt="Karen Okonkwo" className="avatar" />
 				</div>
 				Whatsapp 2.0
 			</header>
